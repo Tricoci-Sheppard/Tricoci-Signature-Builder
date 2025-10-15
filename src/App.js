@@ -37,8 +37,8 @@ const CAMPUSES = [
 
 function Row({ label, children }) {
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '160px 1fr', gap: '0.75rem', alignItems: 'center', marginBottom: '0.75rem' }}>
-      <div style={{ fontSize: '0.9rem', color: '#6b7280' }}>{label}</div>
+    <div className="row" style={{ display: "grid", gridTemplateColumns: "160px 1fr", gap: "0.75rem", alignItems: "center", marginBottom: "0.75rem" }}>
+      <div style={{ fontSize: "0.9rem", color: "#6b7280" }}>{label}</div>
       <div>{children}</div>
     </div>
   );
@@ -66,69 +66,136 @@ export default function SignatureBuilder() {
 
   const htmlSignature = useMemo(() => buildHtml(values), [values]);
 
-  async function copyHtml() {
-    await navigator.clipboard.writeText(htmlSignature);
-    alert("Copied to clipboard");
+  async function copySignature() {
+    const html = htmlSignature;
+    try {
+      if (navigator.clipboard && window.ClipboardItem) {
+        const blobHtml = new Blob([html], { type: "text/html" });
+        const blobText = new Blob([html.replace(/<[^>]+>/g, "")], { type: "text/plain" });
+        const item = new ClipboardItem({ "text/html": blobHtml, "text/plain": blobText });
+        await navigator.clipboard.write([item]);
+        showToast();
+        return;
+      }
+    } catch (err) {}
+
+    try {
+      const hidden = document.createElement("div");
+      hidden.setAttribute("contenteditable", "true");
+      hidden.style.position = "fixed";
+      hidden.style.pointerEvents = "none";
+      hidden.style.opacity = "0";
+      hidden.style.whiteSpace = "pre-wrap";
+      hidden.innerHTML = html;
+      document.body.appendChild(hidden);
+
+      const range = document.createRange();
+      range.selectNodeContents(hidden);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+      document.execCommand("copy");
+      sel.removeAllRanges();
+      document.body.removeChild(hidden);
+      showToast();
+    } catch (e) {}
   }
 
-  async function exportPng() {
-    if (!previewRef.current) return;
-    const dataUrl = await toPng(previewRef.current, { pixelRatio: 2 });
-    const a = document.createElement("a");
-    a.href = dataUrl;
-    a.download = "tricoci-signature.png";
-    a.click();
+  function showToast() {
+    const notice = document.createElement("div");
+    notice.textContent = "✅ Signature copied to clipboard! Paste it into Gmail Signature settings.";
+    notice.style.position = "fixed";
+    notice.style.bottom = "20px";
+    notice.style.right = "20px";
+    notice.style.background = BRAND.primary;
+    notice.style.color = "#fff";
+    notice.style.padding = "12px 16px";
+    notice.style.borderRadius = "8px";
+    notice.style.boxShadow = "0 2px 8px rgba(0,0,0,0.15)";
+    notice.style.zIndex = "9999";
+    document.body.appendChild(notice);
+    setTimeout(() => notice.remove(), 3000);
   }
 
   return (
-    <div style={{ background: '#ffffff', minHeight: '100vh', padding: '2rem', fontFamily: 'Inter, system-ui, sans-serif', color: '#111' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        <header style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '2rem' }}>
+    <div style={{ background: "#ffffff", minHeight: "100vh", padding: "2rem", fontFamily: "Inter, system-ui, sans-serif", color: "#111" }}>
+      <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+        <style>{`
+          .grid-2col { display: grid; gap: 2rem; grid-template-columns: 1fr 1fr; }
+          @media (max-width: 900px) {
+            .grid-2col { grid-template-columns: 1fr; gap: 1rem; }
+            .row { grid-template-columns: 1fr !important; }
+            .actions { width: 100%; margin-top: 0.75rem; }
+            .actions .btn { width: 100%; }
+          }
+        `}</style>
+
+        <header style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "2rem" }}>
           <div>
-            <h1 style={{ fontSize: '1.75rem', fontWeight: '600', margin: 0 }}>Tricoci University — Email Signature Builder</h1>
-            <p style={{ fontSize: '0.9rem', color: '#6b7280', marginTop: '0.25rem' }}>Fill out the fields below to generate your signature.</p>
+            <h1 style={{ fontSize: "1.75rem", fontWeight: 600, margin: 0 }}>Tricoci University — Email Signature Builder</h1>
+            <p style={{ fontSize: "0.9rem", color: "#6b7280", marginTop: "0.25rem" }}>Fill out the fields below to generate your signature.</p>
           </div>
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
-            <button onClick={copyHtml} style={buttonPrimary}>Copy HTML</button>
-            <button onClick={exportPng} style={buttonSecondary}>Export PNG</button>
+          <div className="actions" style={{ display: "flex", gap: "0.5rem" }}>
+            <button onClick={copySignature} className="btn" style={buttonPrimary}>Copy Signature</button>
+            <button onClick={async () => {
+              if (!previewRef.current) return;
+              const dataUrl = await toPng(previewRef.current, { pixelRatio: 2 });
+              const a = document.createElement("a");
+              a.href = dataUrl;
+              a.download = "tricoci-signature.png";
+              a.click();
+            }} className="btn" style={buttonSecondary}>Export PNG</button>
           </div>
         </header>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+        <div className="grid-2col">
           <div style={cardStyle}>
             <Row label="Full name">
-              <input style={inputStyle} value={values.fullName} onChange={(e)=>handleChange("fullName", e.target.value)} />
+              <input style={inputStyle} value={values.fullName} onChange={(e) => handleChange("fullName", e.target.value)} />
             </Row>
             <Row label="Title">
-              <input style={inputStyle} value={values.title} onChange={(e)=>handleChange("title", e.target.value)} />
+              <input style={inputStyle} value={values.title} onChange={(e) => handleChange("title", e.target.value)} />
             </Row>
             <Row label="Work email">
-              <input style={inputStyle} value={values.email} onChange={(e)=>handleChange("email", e.target.value)} />
+              <input style={inputStyle} value={values.email} onChange={(e) => handleChange("email", e.target.value)} />
             </Row>
             <Row label="Mobile (optional)">
-              <input style={inputStyle} value={values.mobile} onChange={(e)=>handleChange("mobile", e.target.value)} />
+              <input style={inputStyle} value={values.mobile} onChange={(e) => handleChange("mobile", e.target.value)} />
             </Row>
             <Row label="Website">
-              <input style={inputStyle} value={values.website} onChange={(e)=>handleChange("website", e.target.value)} />
+              <input style={inputStyle} value={values.website} onChange={(e) => handleChange("website", e.target.value)} />
             </Row>
             <Row label="Campus address">
-              <select style={inputStyle} value={CAMPUSES.find(c=>c.address===values.address)?.label || "— Select campus —"} onChange={(e)=>{const sel=CAMPUSES.find(c=>c.label===e.target.value); handleChange("address", sel?.address || "");}}>
-                {CAMPUSES.map((c)=>(<option key={c.label} value={c.label}>{c.label}</option>))}
+              <select style={inputStyle} value={CAMPUSES.find((c) => c.address === values.address)?.label || "— Select campus —"} onChange={(e) => { const sel = CAMPUSES.find((c) => c.label === e.target.value); handleChange("address", sel ? sel.address : ""); }}>
+                {CAMPUSES.map((c) => (
+                  <option key={c.label} value={c.label}>{c.label}</option>
+                ))}
               </select>
             </Row>
             <Row label="Address">
-              <textarea style={{...inputStyle, minHeight:'80px'}} rows={2} value={values.address} onChange={(e)=>handleChange("address", e.target.value)} />
+              <textarea style={{ ...inputStyle, minHeight: "80px" }} rows={2} value={values.address} onChange={(e) => handleChange("address", e.target.value)} />
             </Row>
           </div>
 
           <div style={cardStyle}>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '1rem' }}>Live Preview</h2>
-            <div style={{ border: '1px solid #e5e7eb', borderRadius: '12px', padding: '1rem', background: '#fff' }}>
+            <h2 style={{ fontSize: "1.25rem", fontWeight: 600, marginBottom: "1rem" }}>Live Preview</h2>
+            <div style={{ border: "1px solid #e5e7eb", borderRadius: "12px", padding: "1rem", background: "#fff" }}>
               <div ref={previewRef}>
                 <div dangerouslySetInnerHTML={{ __html: htmlSignature }} />
               </div>
             </div>
           </div>
+        </div>
+
+        <div style={{ marginTop: "2rem", padding: "1.5rem", background: "#f9fafb", borderRadius: "8px", fontSize: "0.9rem" }}>
+          <h3 style={{ marginBottom: "0.5rem", fontSize: "1.1rem", fontWeight: 600 }}>📩 How to Add to Gmail</h3>
+          <ol style={{ lineHeight: 1.6, paddingLeft: "1.2rem" }}>
+            <li>Fill out the form and click <strong>“Copy Signature”</strong> (this copies a rich, clickable version).</li>
+            <li>Open Gmail → ⚙️ <strong>Settings</strong> → <strong>See all settings</strong>.</li>
+            <li>Scroll to <strong>Signature</strong> → <strong>Create New</strong>.</li>
+            <li>Paste the signature into the box (⌘ + V on Mac / Ctrl + V on Windows).</li>
+            <li>Scroll to the bottom and click <strong>Save Changes</strong>.</li>
+          </ol>
         </div>
       </div>
     </div>
@@ -136,40 +203,40 @@ export default function SignatureBuilder() {
 }
 
 const cardStyle = {
-  background: '#ffffff',
-  padding: '1.5rem',
-  borderRadius: '12px',
-  boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
-  border: '1px solid #e5e7eb'
+  background: "#ffffff",
+  padding: "1.5rem",
+  borderRadius: "12px",
+  boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+  border: "1px solid #e5e7eb"
 };
 
 const inputStyle = {
-  width: '100%',
-  padding: '0.5rem 0.75rem',
-  fontSize: '0.9rem',
-  border: '1px solid #d1d5db',
-  borderRadius: '8px',
-  background: '#fff'
+  width: "100%",
+  padding: "0.5rem 0.75rem",
+  fontSize: "0.9rem",
+  border: "1px solid #d1d5db",
+  borderRadius: "8px",
+  background: "#fff"
 };
 
 const buttonPrimary = {
-  background: '#0b5a46',
-  color: '#fff',
-  border: 'none',
-  padding: '0.5rem 1rem',
-  borderRadius: '8px',
-  cursor: 'pointer',
-  fontWeight: '500'
+  background: BRAND.primary,
+  color: "#fff",
+  border: "none",
+  padding: "0.5rem 1rem",
+  borderRadius: "8px",
+  cursor: "pointer",
+  fontWeight: 500
 };
 
 const buttonSecondary = {
-  background: '#fff',
-  color: '#111',
-  border: '1px solid #d1d5db',
-  padding: '0.5rem 1rem',
-  borderRadius: '8px',
-  cursor: 'pointer',
-  fontWeight: '500'
+  background: "#fff",
+  color: "#111",
+  border: "1px solid #d1d5db",
+  padding: "0.5rem 1rem",
+  borderRadius: "8px",
+  cursor: "pointer",
+  fontWeight: 500
 };
 
 function formatAddress(address) {
@@ -193,9 +260,7 @@ function buildHtml(values) {
     values.mobile
       ? `<span style="font-weight:bold;color:${text}">Mobile:</span> <a href="tel:${safe(values.mobile)}" style="color:${text};text-decoration:none">${safe(values.mobile)}</a>`
       : ""
-  ]
-    .filter(Boolean)
-    .join("<br/>");
+  ].filter(Boolean).join("<br/>");
 
   return `
 <table cellpadding="0" cellspacing="0" role="presentation" style="font-family:Arial,Helvetica,sans-serif;color:${text};font-size:14px;line-height:1.35">
