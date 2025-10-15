@@ -37,9 +37,9 @@ const CAMPUSES = [
 
 function Row({ label, children }) {
   return (
-    <div className="grid grid-cols-12 gap-3 items-center">
-      <div className="col-span-12 md:col-span-3 text-sm text-gray-600">{label}</div>
-      <div className="col-span-12 md:col-span-9">{children}</div>
+    <div style={{ display: 'grid', gridTemplateColumns: '160px 1fr', gap: '0.75rem', alignItems: 'center', marginBottom: '0.75rem' }}>
+      <div style={{ fontSize: '0.9rem', color: '#6b7280' }}>{label}</div>
+      <div>{children}</div>
     </div>
   );
 }
@@ -81,57 +81,51 @@ export default function SignatureBuilder() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
-      <div className="max-w-6xl mx-auto p-6 space-y-8">
-        <header className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+    <div style={{ background: '#ffffff', minHeight: '100vh', padding: '2rem', fontFamily: 'Inter, system-ui, sans-serif', color: '#111' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        <header style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '2rem' }}>
           <div>
-            <h1 className="text-2xl font-semibold">Tricoci University — Email Signature Builder</h1>
-            <p className="text-sm text-gray-600">Fill the fields, preview on the right, then copy HTML for your email client.</p>
+            <h1 style={{ fontSize: '1.75rem', fontWeight: '600', margin: 0 }}>Tricoci University — Email Signature Builder</h1>
+            <p style={{ fontSize: '0.9rem', color: '#6b7280', marginTop: '0.25rem' }}>Fill out the fields below to generate your signature.</p>
           </div>
-          <div className="flex gap-2">
-            <button onClick={copyHtml} className="px-4 py-2 rounded-2xl bg-black text-white text-sm shadow hover:opacity-90">
-              Copy HTML
-            </button>
-            <button onClick={exportPng} className="px-4 py-2 rounded-2xl bg-white border text-sm shadow hover:bg-gray-100">
-              Export PNG
-            </button>
+          <div style={{ display: 'flex', gap: '0.5rem' }}>
+            <button onClick={copyHtml} style={buttonPrimary}>Copy HTML</button>
+            <button onClick={exportPng} style={buttonSecondary}>Export PNG</button>
           </div>
         </header>
 
-        <div className="grid grid-cols-12 gap-6">
-          <div className="col-span-12 lg:col-span-6 bg-white rounded-2xl shadow p-5 space-y-5">
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+          <div style={cardStyle}>
             <Row label="Full name">
-              <input className="w-full px-3 py-2 border rounded-xl" value={values.fullName} onChange={(e)=>handleChange("fullName", e.target.value)} />
+              <input style={inputStyle} value={values.fullName} onChange={(e)=>handleChange("fullName", e.target.value)} />
             </Row>
             <Row label="Title">
-              <input className="w-full px-3 py-2 border rounded-xl" value={values.title} onChange={(e)=>handleChange("title", e.target.value)} />
+              <input style={inputStyle} value={values.title} onChange={(e)=>handleChange("title", e.target.value)} />
             </Row>
             <Row label="Work email">
-              <input className="w-full px-3 py-2 border rounded-xl" value={values.email} onChange={(e)=>handleChange("email", e.target.value)} />
+              <input style={inputStyle} value={values.email} onChange={(e)=>handleChange("email", e.target.value)} />
             </Row>
             <Row label="Mobile (optional)">
-              <input className="w-full px-3 py-2 border rounded-xl" value={values.mobile} onChange={(e)=>handleChange("mobile", e.target.value)} />
+              <input style={inputStyle} value={values.mobile} onChange={(e)=>handleChange("mobile", e.target.value)} />
             </Row>
             <Row label="Website">
-              <input className="w-full px-3 py-2 border rounded-xl" value={values.website} onChange={(e)=>handleChange("website", e.target.value)} />
+              <input style={inputStyle} value={values.website} onChange={(e)=>handleChange("website", e.target.value)} />
             </Row>
             <Row label="Campus address">
-              <select className="w-full px-3 py-2 border rounded-xl" value={CAMPUSES.find(c=>c.address===values.address)?.label || "— Select campus —"} onChange={(e)=>{const sel=CAMPUSES.find(c=>c.label===e.target.value); handleChange("address", sel?.address || "");}}>
+              <select style={inputStyle} value={CAMPUSES.find(c=>c.address===values.address)?.label || "— Select campus —"} onChange={(e)=>{const sel=CAMPUSES.find(c=>c.label===e.target.value); handleChange("address", sel?.address || "");}}>
                 {CAMPUSES.map((c)=>(<option key={c.label} value={c.label}>{c.label}</option>))}
               </select>
             </Row>
             <Row label="Address">
-              <textarea className="w-full px-3 py-2 border rounded-xl" rows={2} value={values.address} onChange={(e)=>handleChange("address", e.target.value)} />
+              <textarea style={{...inputStyle, minHeight:'80px'}} rows={2} value={values.address} onChange={(e)=>handleChange("address", e.target.value)} />
             </Row>
           </div>
 
-          <div className="col-span-12 lg:col-span-6 space-y-4">
-            <div className="bg-white rounded-2xl shadow p-5">
-              <h2 className="font-medium text-lg mb-3">Live Preview</h2>
-              <div className="border rounded-xl p-4 overflow-auto">
-                <div ref={previewRef}>
-                  <div dangerouslySetInnerHTML={{ __html: htmlSignature }} />
-                </div>
+          <div style={cardStyle}>
+            <h2 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '1rem' }}>Live Preview</h2>
+            <div style={{ border: '1px solid #e5e7eb', borderRadius: '12px', padding: '1rem', background: '#fff' }}>
+              <div ref={previewRef}>
+                <div dangerouslySetInnerHTML={{ __html: htmlSignature }} />
               </div>
             </div>
           </div>
@@ -141,10 +135,46 @@ export default function SignatureBuilder() {
   );
 }
 
+const cardStyle = {
+  background: '#ffffff',
+  padding: '1.5rem',
+  borderRadius: '12px',
+  boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+  border: '1px solid #e5e7eb'
+};
+
+const inputStyle = {
+  width: '100%',
+  padding: '0.5rem 0.75rem',
+  fontSize: '0.9rem',
+  border: '1px solid #d1d5db',
+  borderRadius: '8px',
+  background: '#fff'
+};
+
+const buttonPrimary = {
+  background: '#0b5a46',
+  color: '#fff',
+  border: 'none',
+  padding: '0.5rem 1rem',
+  borderRadius: '8px',
+  cursor: 'pointer',
+  fontWeight: '500'
+};
+
+const buttonSecondary = {
+  background: '#fff',
+  color: '#111',
+  border: '1px solid #d1d5db',
+  padding: '0.5rem 1rem',
+  borderRadius: '8px',
+  cursor: 'pointer',
+  fontWeight: '500'
+};
+
 function formatAddress(address) {
   if (!address) return "";
-  const parts = address.split(",").map(p => p.trim());
-  // CRC special case: keep '3rd floor' on the first line
+  const parts = address.split(",").map((p) => p.trim());
   if (address.includes("3rd floor")) {
     return `${parts[0]}, ${parts[1]}<br/>${parts.slice(2).join(", ")}`;
   }
@@ -160,8 +190,12 @@ function buildHtml(values) {
   const safe = (s) => s || "";
 
   const phoneBlock = [
-    values.mobile ? `<span style="font-weight:bold;color:${text}">Mobile:</span> <a href="tel:${safe(values.mobile)}" style="color:${text};text-decoration:none">${safe(values.mobile)}</a>` : ""
-  ].filter(Boolean).join("<br/>");
+    values.mobile
+      ? `<span style="font-weight:bold;color:${text}">Mobile:</span> <a href="tel:${safe(values.mobile)}" style="color:${text};text-decoration:none">${safe(values.mobile)}</a>`
+      : ""
+  ]
+    .filter(Boolean)
+    .join("<br/>");
 
   return `
 <table cellpadding="0" cellspacing="0" role="presentation" style="font-family:Arial,Helvetica,sans-serif;color:${text};font-size:14px;line-height:1.35">
