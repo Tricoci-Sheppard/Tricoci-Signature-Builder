@@ -319,10 +319,7 @@ function buildHtml(values) {
 <table cellpadding="0" cellspacing="0" role="presentation" style="font-family:Arial,Helvetica,sans-serif;color:${text};font-size:14px;line-height:1.35">
   <tr>
     <td valign="top" style="padding-right:20px; text-align:left;">
-      <img src="${safe(DEFAULTS.logoUrl)}" alt="Tricoci University" width="220" style="display:block;width:220px;height:auto;margin-bottom:8px" />
-      <div style="font-size:12px;color:${headline};font-weight:800;font-style:italic;text-transform:uppercase;letter-spacing:0.5px;max-width:220px;">
-        ${DEFAULTS.tagline}
-      </div>
+      <img src="${safe(DEFAULTS.logoUrl)}" alt="Tricoci University" width="220" style="display:block;width:220px;height:auto;" />
     </td>
     <td valign="top">
       <div style="font-size:24px;font-weight:800;color:${headline}">${safe(values.fullName)}</div>
@@ -334,7 +331,14 @@ function buildHtml(values) {
     </td>
   </tr>
 </table>
-<div style="font-size:10px;font-weight:bold;color:#666;margin-top:12px;max-width:600px;line-height:1.4">
+
+<!-- ✨ Full-width tagline -->
+<div style="font-size:14px;color:${headline};font-weight:800;font-style:italic;text-transform:uppercase;letter-spacing:0.5px;margin-top:16px;line-height:1.4;">
+  ${DEFAULTS.tagline}
+</div>
+
+<!-- Disclaimer -->
+<div style="font-size:10px;font-weight:bold;color:#666;margin-top:10px;max-width:600px;line-height:1.4">
   This message and any accompanying document(s) contain information for the sole use of the above-intended recipient(s) and may contain privileged or confidential information. Any other distribution or use of this communication is strictly prohibited. Please notify this office immediately by return email if you are not the intended recipient and delete this message and any attachments.
 </div>`;
 }
