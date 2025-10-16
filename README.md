@@ -1,24 +1,22 @@
-# Tricoci University Signature Builder (Firebase Auth, Vite + React)
+# Tricoci University Signature Builder (Vite + React)
 
-This app is restricted to @tricociuniversity.edu users via Firebase Authentication.
+This is a Vercel-ready React app for generating standardized Tricoci signatures.
 
-## Local Dev
+## Local dev
 ```bash
 npm install
-cp .env.example .env.local  # fill with your Firebase values
 npm run dev
 ```
 
+## Build
+```bash
+npm run build
+# output in: dist/
+```
+
 ## Deploy to Vercel
-- Add env vars in Project → Settings → Environment Variables:
-  - VITE_FIREBASE_API_KEY
-  - VITE_FIREBASE_AUTH_DOMAIN
-  - VITE_FIREBASE_PROJECT_ID
-  - VITE_FIREBASE_APP_ID
+- Push to GitHub and import into Vercel.
 - Build Command: `npm run build`
 - Output Directory: `dist`
-
-## Notes
-- `index.html` includes `<meta name="robots" content="noindex, nofollow" />`.
-- `public/robots.txt` blocks all crawlers.
-- Only @tricociuniversity.edu users can access.
+- Install Command: `npm ci` (or `npm install`)
+```
