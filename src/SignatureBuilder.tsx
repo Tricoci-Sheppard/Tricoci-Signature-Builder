@@ -318,8 +318,11 @@ function buildHtml(values) {
   return `
 <table cellpadding="0" cellspacing="0" role="presentation" style="font-family:Arial,Helvetica,sans-serif;color:${text};font-size:14px;line-height:1.35">
   <tr>
-    <td valign="top" style="padding-right:20px">
-      <img src="${safe(DEFAULTS.logoUrl)}" alt="Tricoci University" width="220" style="display:block;width:220px;height:auto;margin-bottom:12px" />
+    <td valign="top" style="padding-right:20px; text-align:left;">
+      <img src="${safe(DEFAULTS.logoUrl)}" alt="Tricoci University" width="220" style="display:block;width:220px;height:auto;margin-bottom:8px" />
+      <div style="font-size:12px;color:${headline};font-weight:800;font-style:italic;text-transform:uppercase;letter-spacing:0.5px;max-width:220px;">
+        ${DEFAULTS.tagline}
+      </div>
     </td>
     <td valign="top">
       <div style="font-size:24px;font-weight:800;color:${headline}">${safe(values.fullName)}</div>
@@ -328,7 +331,6 @@ function buildHtml(values) {
       ${phoneBlock ? `<div style="margin-top:8px">${phoneBlock}</div>` : ""}
       ${values.email ? `<div><span style="font-weight:bold;color:${text}">Email:</span> <a href="mailto:${safe(values.email)}" style="color:${text};text-decoration:none">${safe(values.email)}</a></div>` : ""}
       ${values.website ? `<div><a href="https://www.tricociuniversity.edu" style="color:${text};text-decoration:none">${safe(values.website)}</a></div>` : ""}
-      <div style="color:${headline};font-weight:800;font-style:italic;margin-top:14px;text-transform:uppercase;letter-spacing:0.5px">${DEFAULTS.tagline}</div>
     </td>
   </tr>
 </table>
