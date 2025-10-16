@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-// (Insert your full SignatureBuilder component code here)
-=======
 import React, { useMemo, useRef, useState } from "react";
 import { toPng } from "html-to-image";
 
@@ -15,7 +12,7 @@ const DEFAULTS = {
   tagline: "CELEBRATING 20+ YEARS OF CHANGING LIVES",
   website: "www.tricociuniversity.edu",
   address: "",
-  logoUrl: "https://www.tricociuniversity.edu/wp-content/uploads/2025/10/TUBC-Sig-Logo-4.png"
+  logoUrl: "https://www.tricociuniversity.edu/wp-content/uploads/2025/10/TUBC-Sig-Logo-2.png"
 };
 
 const CAMPUSES = [
@@ -270,7 +267,7 @@ const inputStyle = {
   width: "100%",
   padding: "0.5rem 0.75rem",
   fontSize: "0.9rem",
-  border: "1px solid #d1d5db",
+  border: "1px solid "#d1d5db",
   borderRadius: "8px",
   background: "#fff"
 };
@@ -339,4 +336,3 @@ function buildHtml(values) {
   This message and any accompanying document(s) contain information for the sole use of the above-intended recipient(s) and may contain privileged or confidential information. Any other distribution or use of this communication is strictly prohibited. Please notify this office immediately by return email if you are not the intended recipient and delete this message and any attachments.
 </div>`;
 }
->>>>>>> parent of d2f47c02 (Update SignatureBuilder.tsx)

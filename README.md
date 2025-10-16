@@ -1,39 +1,24 @@
-# Tricoci University Signature Builder with Firebase Auth
+# Tricoci University Signature Builder (Firebase Auth, Vite + React)
 
-This app uses Firebase Authentication to restrict access to users in the @tricociuniversity.edu domain.
+This app is restricted to @tricociuniversity.edu users via Firebase Authentication.
 
-## 🚀 Setup
-
-1. Create a Firebase project and enable Google Sign-In.
-2. Add your Vercel domain under "Authorized Domains" in Firebase.
-3. Copy your Firebase config into a `.env` file based on `.env.example`.
-4. Deploy to Vercel.
-
-## 🧪 Local Dev
-
+## Local Dev
 ```bash
 npm install
+cp .env.example .env.local  # fill with your Firebase values
 npm run dev
 ```
 
-## 🔐 Environment Variables
-
-- VITE_FIREBASE_API_KEY
-- VITE_FIREBASE_AUTH_DOMAIN
-- VITE_FIREBASE_PROJECT_ID
-- VITE_FIREBASE_APP_ID
-
-Add them to Vercel Project → Settings → Environment Variables.
-
-## 🛡️ Crawling Protection
-
-- `robots.txt` blocks all crawlers.
-- `<meta name="robots" content="noindex, nofollow" />` in index.html.
-
-## 🧭 Deployment on Vercel
-
+## Deploy to Vercel
+- Add env vars in Project → Settings → Environment Variables:
+  - VITE_FIREBASE_API_KEY
+  - VITE_FIREBASE_AUTH_DOMAIN
+  - VITE_FIREBASE_PROJECT_ID
+  - VITE_FIREBASE_APP_ID
 - Build Command: `npm run build`
 - Output Directory: `dist`
-- Install Command: `npm ci` (or `npm install`)
 
-Once deployed, only authenticated @tricociuniversity.edu users can access the app.
+## Notes
+- `index.html` includes `<meta name="robots" content="noindex, nofollow" />`.
+- `public/robots.txt` blocks all crawlers.
+- Only @tricociuniversity.edu users can access.
