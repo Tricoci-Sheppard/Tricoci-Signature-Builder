@@ -320,7 +320,7 @@ function buildHtml(values) {
   <tr>
     <td valign="top" style="padding-right:20px; text-align:left;">
       <img src="${safe(DEFAULTS.logoUrl)}" alt="Tricoci University" width="220" style="display:block;width:220px;height:auto;margin-bottom:8px" />
-      <div style="font-size:12px;color:${headline};font-weight:800;font-style:italic;text-transform:uppercase;letter-spacing:0.5px;max-width:400px;">
+      <div style="font-size:12px;color:${headline};font-weight:800;font-style:italic;text-transform:uppercase;letter-spacing:0.5px;max-width:220px;">
         ${DEFAULTS.tagline}
       </div>
     </td>
