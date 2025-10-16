@@ -12,7 +12,7 @@ const DEFAULTS = {
   tagline: "CELEBRATING 20+ YEARS OF CHANGING LIVES",
   website: "www.tricociuniversity.edu",
   address: "",
-  logoUrl: "https://www.tricociuniversity.edu/wp-content/uploads/2025/10/TUBC-Sig-Logo-2.png"
+  logoUrl: "https://www.tricociuniversity.edu/wp-content/uploads/2025/10/TUBC-Sig-Logo-4.png"
 };
 
 const CAMPUSES = [
