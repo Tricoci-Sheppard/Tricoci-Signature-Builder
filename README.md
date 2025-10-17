@@ -1,22 +1,25 @@
-# Tricoci University Signature Builder (Vite + React)
+# Tricoci Signature Builder (React + Vite + TypeScript)
 
-This is a Vercel-ready React app for generating standardized Tricoci signatures.
+- Copy-rich **HTML signature** to clipboard
+- **Export PNG** of the preview
+- **Campus address** selector
+- Gmail/Outlook tabs with instructions
+- **No-index** by default (robots + meta + Vercel header)
 
-## Local dev
+## Local Dev
 ```bash
-npm install
+npm i
 npm run dev
 ```
+Open http://localhost:5173
 
 ## Build
 ```bash
 npm run build
-# output in: dist/
 ```
+Output -> `dist/`
 
-## Deploy to Vercel
-- Push to GitHub and import into Vercel.
-- Build Command: `npm run build`
-- Output Directory: `dist`
-- Install Command: `npm ci` (or `npm install`)
-```
+## Deploy (Vercel)
+Framework preset: **Vite**  
+Build command: `npm run build`  
+Output dir: `dist`
